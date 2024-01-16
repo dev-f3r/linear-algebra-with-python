@@ -146,35 +146,3 @@ def echelon_form(X):
         p += 1 if p < c - 1 else 0
         M = move_pivot_row_to_top(M, i + 1, p)
     return M
-
-
-D = np.array(
-    [
-        [0, 0, 6],
-        [-1, -2, -3],
-        [1, 2, 3],
-        [0, 2, 6],
-        [2, 0, -6],
-    ]
-)
-
-A = np.array(
-    [
-        [2, -5, 1],
-        [1, 4, -2],
-        [1, -3, -1],
-        [2, 1, -3],
-    ]
-)
-
-print(echelon_form(D))
-print(echelon_form(A))
-test = np.array(
-    [
-        [1.0, 2.0, 3.0],
-        [0.0, 0.0, 6.0],
-        [0.0, 2.0, 6.0],
-        [0.0, -4.0, -12.0],
-        [0.0, 0.0, 0.0],
-    ]
-)
