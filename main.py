@@ -1,9 +1,11 @@
-import numpy as np
-from echelon_form import *
+import linear_algebra as la
+from linear_algebra import np
 
 # * Exercise 8
 # * Calculate the rank of each matrix
 A = np.array([[1, -1, 1], [0, 1, 0], [1, 1, 0]])
+la.rank(A)
+# assert la.rank(A) == np.linalg.matrix_rank(A)
 
 B = np.array([[1, 2, 3, 0], [-1, 2, -3, 1], [2, 0, 6, -1]])
 

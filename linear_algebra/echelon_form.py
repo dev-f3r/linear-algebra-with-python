@@ -114,7 +114,7 @@ def move_null_rows_to_bottom(M):
     return M
 
 
-def echelon_form(X):
+def ef(X):
     """
     Convert a matrix to echelon form.
 
