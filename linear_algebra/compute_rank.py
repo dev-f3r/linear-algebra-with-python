@@ -1,9 +1,22 @@
 import numpy as np
 from .echelon_form import ef
 
+
 def rank(X):
-    M = np.copy(X)
+    """
+    Calculate the rank of a matrix
 
-    M = ef(M)
+    Args:
+        X (numpy.ndarray): The matrix.
 
-    print(np.any(M, axis=1))
+    Returns:
+        int: The rank of the matrix.
+    """
+    M = np.copy(X)  # Makes a copy of the matrix
+
+    M = ef(M)  # Converts into its echelon form
+
+    # Counts the True values
+    return np.count_nonzero(
+        np.any(M, axis=1)  # non-null rows as True, null rows as False
+    )
