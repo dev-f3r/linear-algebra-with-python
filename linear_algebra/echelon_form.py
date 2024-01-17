@@ -2,20 +2,7 @@ import numpy as np
 from math import inf
 
 
-# def i_non_null(R):
-#     """
-#     Find the index of the first non-null element in a row.
-
-#     Args:
-#         R (numpy.ndarray): The row.
-
-#     Returns:
-#         int: The index of the first non-null element.
-#     """
-#     return np.argmax(R != 0)
-
-
-def is_echelon_form(M):
+def is_ef(M):
     """
     Check if a matrix is in echelon form.
 
@@ -56,7 +43,7 @@ def pri(M, cri, crvi):
     Args:
         M (numpy.ndarray): The matrix.
         cri (int): The current row index.
-        crvi (int): The current element index.
+        crvi (int): The current val index.
 
     Returns:
         int: The index of the row with the pivot element.
@@ -80,37 +67,48 @@ def pri(M, cri, crvi):
     return mvi
 
 
-def move_pivot_row_to_top(M, i, j):
+def move_pr_top(X, i, j):
     """
     Move the pivot row to the top.
 
     Args:
-        M (numpy.ndarray): The matrix.
+        X (numpy.ndarray): The matrix.
         i (int): The current row index.
         j (int): The current column index.
 
     Returns:
         numpy.ndarray: The matrix with the pivot row moved to the top.
     """
+    M = np.copy(M)
+    # Get the pivot row index
     p = pri(M, i, j)
+    # Swap the the current column with the pivot column
     M[[i, p]] = M[[p, i]]
+
     return M
 
 
-def move_null_rows_to_bottom(M):
+def move_nr_bottom(X):
     """
     Move null rows to the bottom.
 
     Args:
-        M (numpy.ndarray): The matrix.
+        X (numpy.ndarray): The matrix.
 
     Returns:
         numpy.ndarray: The matrix with null rows moved to the bottom.
     """
-    null_row_indices = np.where(~M.any(axis=1))[0]
-    M = np.delete(M, null_row_indices, axis=0)
-    null_rows = np.zeros((len(null_row_indices), M.shape[1]))
-    M = np.concatenate((M, null_rows))
+    M = np.copy(X)
+
+    # Find the indices of the null rows
+    nri = np.where(~M.any(axis=1))[0]
+    # Delete the null rows
+    M = np.delete(M, nri, axis=0)
+    # Make a matrix with of null rows
+    nrM = np.zeros((len(nri), M.shape[1]))
+    # Concatenate the null matrix to the matrix
+    M = np.concatenate((M, nrM))
+
     return M
 
 
@@ -124,25 +122,41 @@ def ef(X):
     Returns:
         numpy.ndarray: The matrix in echelon form.
     """
+    # Make a copy of the matrix
     M = np.copy(X)
+    # Contains the index of the pivot element
     p = 0
+    # Get the number of rows
     r = M.shape[0]
+    # Get the number of columns
     c = M.shape[1]
-    M = move_pivot_row_to_top(M, 0, 0)
+    # Start the iterations with the correct pivot row
+    M = move_pr_top(M, 0, 0)
     for i in range(r - 1):
-        c_row = M[i]
+        cr = M[i]  # Current row
         for j in range(i + 1, r):
-            n_row = M[j]
-            x, y = c_row[p], n_row[p]
+            nr = M[j]  # Next row
+            x, y = cr[p], nr[p]  # Pivot elements of current row and next row
+
+            # If the pivot element of the next row is not zero, the next column must be computed
             if y != 0:
+                # If pivot elements are oposite just add the columns
                 if x == -y:
-                    M[j] = c_row + n_row
+                    M[j] = cr + nr
+                # If pivot elements are different, find the escalar k that meets x * k + y = 0
                 else:
-                    k = np.linalg.solve(np.array([[x]]), np.array([[-y]]))
-                    M[j] = c_row * k[0] + n_row
-        M = move_null_rows_to_bottom(M)
-        if is_echelon_form(M):
+                    k = -y / x
+                    M[j] = cr * k[0] + nr
+
+        # * After compute all the rows bellow the pivot row
+        # Move the null rows to bottom
+        M = move_nr_bottom(M)
+        # If the matrix is already in its echelon form return it
+        if is_ef(M):
             return M
+        # Update the index of the pivot element
         p += 1 if p < c - 1 else 0
-        M = move_pivot_row_to_top(M, i + 1, p)
+        # Find and move the pivot row to the top of the no computed part of the matrix
+        M = move_pr_top(M, i + 1, p)
+
     return M
