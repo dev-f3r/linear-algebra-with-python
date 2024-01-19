@@ -1,6 +1,6 @@
 import numpy as np
 from math import inf
-
+from .utils import move_pr_top, move_nr_bottom
 
 def is_ef(M):
     """
