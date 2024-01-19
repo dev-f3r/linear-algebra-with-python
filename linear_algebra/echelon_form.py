@@ -79,7 +79,7 @@ def move_pr_top(X, i, j):
     Returns:
         numpy.ndarray: The matrix with the pivot row moved to the top.
     """
-    M = np.copy(M)
+    M = np.copy(X)
     # Get the pivot row index
     p = pri(M, i, j)
     # Swap the the current column with the pivot column
@@ -146,7 +146,7 @@ def ef(X):
                 # If pivot elements are different, find the escalar k that meets x * k + y = 0
                 else:
                     k = -y / x
-                    M[j] = cr * k[0] + nr
+                    M[j] = cr * k + nr
 
         # * After compute all the rows bellow the pivot row
         # Move the null rows to bottom

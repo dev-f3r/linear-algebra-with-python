@@ -1,5 +1,5 @@
 import linear_algebra as la
-from linear_algebra import np
+import numpy as np
 
 # * Exercise 8
 # * Calculate the rank of each matrix

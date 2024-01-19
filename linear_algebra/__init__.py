@@ -1,5 +1,4 @@
-import numpy as np
-
 from .compute_rank import rank
-from .echelon_form import is_echelon_form
+from .echelon_form import is_ef
+from .echelon_form import pri
 from .echelon_form import ef
