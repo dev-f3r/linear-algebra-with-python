@@ -33,7 +33,7 @@ def pri(M, cri, crvi):
     return mvi
 
 
-def move_pr_top(X, i, j):
+def move_pr_top(X, i, j, logs=None):
     """
     Move the pivot row to the top.
 
@@ -51,10 +51,13 @@ def move_pr_top(X, i, j):
     # Swap the the current column with the pivot column
     M[[i, p]] = M[[p, i]]
 
+    if logs:
+        logs.r_swap(i, p)
+
     return M
 
 
-def move_nr_bottom(X):
+def move_nr_bottom(X, logs=None):
     """
     Move null rows to the bottom.
 
@@ -74,5 +77,8 @@ def move_nr_bottom(X):
     nrM = np.zeros((len(nri), M.shape[1]))
     # Concatenate the null matrix to the matrix
     M = np.concatenate((M, nrM))
+
+    if logs:
+        logs.r_del(nri)
 
     return M
