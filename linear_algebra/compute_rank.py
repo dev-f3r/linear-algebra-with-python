@@ -14,7 +14,7 @@ def rank(X):
     """
     M = np.copy(X)  # Makes a copy of the matrix
 
-    M = ef(M)  # Converts into its echelon form
+    M = ef(M)["matrix"]  # Converts into its echelon form
 
     # Counts the True values
     return np.count_nonzero(
