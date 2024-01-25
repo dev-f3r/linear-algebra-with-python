@@ -36,55 +36,50 @@ def is_ef(M):
 
     return True
 
-
 def ef(X):
     """
     Convert a matrix to echelon form.
 
     Args:
         X (numpy.ndarray): The matrix.
-
     """
-    # List of changes
     logs = Tracker()
-    # Make a copy of the matrix
     M = np.copy(X)
-    # Contains the index of the pivot element
-    p = 0
-    # Get the number of rows
-    r = M.shape[0]
-    # Get the number of columns
-    c = M.shape[1]
-    # Start the iterations with the correct pivot row
-    M = move_pr_top(M, 0, 0, logs)
+    r, c = M.shape
 
-    for i in range(r - 1):
-        cr = M[i]  # Current row
+    # i: Pivot row index
+    # p: Pivot val in pivot row
+    i, p = 0, 0
+
+    # Iterate until M is i echelon form
+    while not is_ef(M):
+        # Move null rows to bottom
+        M = move_nr_bottom(M, logs)
+        # Find and move the pivot row to the top of the non computed part of the matrix
+        M = move_pr_top(M, i, p, logs)
+
+        cr = M[i] # Current row
+
+        # Iterate through the rest of the rows
         for j in range(i + 1, r):
-            nr = M[j]  # Next row
-            x, y = cr[p], nr[p]  # Pivot elements of current row and next row
+            nr = M[j] # Next row
+            x, y = cr[p], nr[p] # Pivot elements of current and next rows
 
-            # If the pivot element of the next row is not zero, the next column must be computed
+            # If the pivot element of the next ow is not zero, the next column must be computed
             if y != 0:
-                # If pivot elements are oposite just add the columns
+                # If pivot elemnts are oposite just add the columns
                 if x == -y:
-                    M[j] = cr + nr  # Change the row
+                    M[j] = cr + nr # Change the row
                     logs.r_sum(j, i)
-                # If pivot elements are different, find the escalar k that meets x * k + y = 0
+                # If pivot elements are different, find the skalar k that meets x * k + y = 0
                 else:
                     k = -y / x
-                    M[j] = cr * k + nr  # Change the row
+                    M[j] = cr * k + nr # Change the row
                     logs.r_prod(j, i, k)
 
-        # * After compute all the rows bellow the pivot row
-        # Move the null rows to bottom
-        M = move_nr_bottom(M, logs)
-        # If the matrix is already in its echelon form return it
-        if is_ef(M):
-            return {"matrix": M, "logs": logs}
-        # Update the index of the pivot element
+        # Prevent `i` to reach the last column
+        i += 1 if i < r - 2 else 0
+        # Prevent `p` to get out of column bound
         p += 1 if p < c - 1 else 0
-        # Find and move the pivot row to the top of the no computed part of the matrix
-        M = move_pr_top(M, i + 1, p, logs)
 
     return {"matrix": M, "logs": logs}
