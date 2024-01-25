@@ -20,3 +20,18 @@ def rank(X):
     return np.count_nonzero(
         np.any(M, axis=1)  # non-null rows as True, null rows as False
     )
+
+def ef_rank(X):
+    """
+    Calculate the rank of a matrix already in echelon form.
+
+    Args:
+        X (numpy.ndarray): The matrix.
+
+    Returns:
+        int: The rank of the matrix.
+    """
+
+    return np.count_nonzero(
+        np.any(X, axis=1)  # non-null rows as True, null rows as False
+    )
