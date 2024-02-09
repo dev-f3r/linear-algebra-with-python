@@ -42,7 +42,7 @@ def trk_deco(x, logs):
 
         change = logs.unqueue()  # Get the following change
 
-    return s.reshape(-1, 1)  # Return the matrix as a column vector
+    return s.reshape(-1)  # Return the matrix as a column vector
 
 
 def reg_sus(X, xs):
@@ -62,15 +62,13 @@ def reg_sus(X, xs):
 
         cr *= tmpr  # Update the current row with incognits
 
-        csr = s[i]  # Current solution row
-
         # From last val until p
         for j in range(M.shape[1] - 1, p - 1, -1):
             cv = cr[j]  # Current val in row
 
             if cv and cv != 1:
-                csr += -cv  # Compute sol matrix
-                tmpr[p] = csr  # Update incognits vals
+                s[i] += -cv  # Compute sols matrix
+                tmpr[p] = s[i]  # Update incognits vals
 
         p -= 1 if p > 0 else 0  # Update p
 
