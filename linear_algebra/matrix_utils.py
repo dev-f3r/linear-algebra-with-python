@@ -48,6 +48,9 @@ def move_pr_top(X, i, j, logs=None):
     M = np.copy(X)
     # Get the pivot row index
     p = pri(M, i, j)
+    # If a pivot row hasn't been found return the matrix.
+    if p == inf or p == i:
+        return M
     # Swap the the current column with the pivot column
     M[[i, p]] = M[[p, i]]
 
@@ -71,6 +74,10 @@ def move_nr_bottom(X, logs=None):
 
     # Find the indices of the null rows
     nri = np.where(~M.any(axis=1))[0]
+
+    if not nri.size:
+        return M
+
     # Delete the null rows
     M = np.delete(M, nri, axis=0)
     # Make a matrix with of null rows
